@@ -1,6 +1,6 @@
-export default function (state = '', action) {
+export default (state='', action) => {
   switch (action.type) {
-    case 'NEWS_FETCH_API':
+    case 'SET_QUERY':
       return action.payload
     default:
       return state

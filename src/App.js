@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
+import Thunk from 'redux-thunk'
 import { BrowserRouter as Router, Route} from 'react-router-dom'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 
 import reducers from './reducer'
-
-const storeWithMiddleware = applyMiddleware()(createStore)
-
 import People from './People'
 import Home from './Home'
 import './App.css';
+
+const storeWithMiddleware = applyMiddleware(Thunk)(createStore)
 
 class App extends Component {
   render() {

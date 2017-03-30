@@ -2,33 +2,27 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import { selectNews, fetchNews } from '../action'
+import { fetchNewsAPI } from '../action'
 
 class NewsList extends React.Component {
   componentDidMount () {
-    this.fetchNews()
-  }
-
-  fetchNews () {
-    fetch('https://hn.algolia.com/api/v1/search?query=redux')
-    .then( response => { return response.json() })
-    .then( data => { this.props.fetchNews(data.hits) })
+    this.props.fetchNewsAPI()
   }
 
   renderList () {
-    return this.props.News.map( news => {
+    return this.props.News.filter( news => {
+      let regPattern = new RegExp(this.props.Query, 'gi')
+      return regPattern.test(news.title)
+    }).map( news => {
       return (
-        <li
-          key={news.title}
-          onClick={() => this.props.selectNews(news)}>
-          {news.title}</li>
+        <li key={news.title}>{news.title}</li>
       )
     })
   }
   render () {
     return (
       <ul>
-        {this.renderList()}
+        { this.props.News === '' ? "Loading.." : this.renderList() }
       </ul>
     )
   }
@@ -36,7 +30,8 @@ class NewsList extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    News: state.News
+    News: state.News,
+    Query: state.Query
   }
 }
 
@@ -45,7 +40,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   //whenever select book called, result should be passd
   //too all our reducer
-  return bindActionCreators({ selectNews: selectNews, fetchNews: fetchNews }, dispatch)
+  return bindActionCreators({ fetchNewsAPI: fetchNewsAPI }, dispatch)
 }
 
 // Promote book list from a component to a container - it need to know
