@@ -6,3 +6,11 @@ export function selectNews (news) {
     payload: news
   }
 }
+
+export function fetchNews (newsData) {
+  console.log(newsData);
+  return {
+    type: 'NEWS_FETCH_API',
+    payload: newsData
+  }
+}

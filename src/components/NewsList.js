@@ -2,9 +2,19 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import { selectNews } from '../action'
+import { selectNews, fetchNews } from '../action'
 
 class NewsList extends React.Component {
+  componentDidMount () {
+    this.fetchNews()
+  }
+
+  fetchNews () {
+    fetch('https://hn.algolia.com/api/v1/search?query=redux')
+    .then( response => { return response.json() })
+    .then( data => { this.props.fetchNews(data.hits) })
+  }
+
   renderList () {
     return this.props.News.map( news => {
       return (
@@ -35,7 +45,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   //whenever select book called, result should be passd
   //too all our reducer
-  return bindActionCreators({ selectNews: selectNews }, dispatch)
+  return bindActionCreators({ selectNews: selectNews, fetchNews: fetchNews }, dispatch)
 }
 
 // Promote book list from a component to a container - it need to know
